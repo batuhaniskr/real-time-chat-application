@@ -24,6 +24,7 @@ Make sure you have Node.js and npm install.
   Your app should now be running on localhost:3000.
       
 # How It Works
+
   A database called "chat_db" named is created via code. 
   The nickname, msg, group information is also kept in the table named Messages.
     
@@ -36,8 +37,15 @@ Make sure you have Node.js and npm install.
    Having an active connection opened between the client and the server so client can send and receive data. This allows             real-time communication using TCP sockets. This is made possible by Socket.io.
 
    The client starts by connecting to the server through a socket(maybe also assigned to a specific namespace). Once connections is successful, client and server can emit and listen to events. 
+
+# RESTful
+
+  Using HTTP requests, we can use the respective action to trigger every of these four CRUD operations.    
+    <li>POST is used to send data to a server — Create</li>
+    <li>GET is used to fetch data from a server — Read</li>
+    <li>PUT is used to send and update data — Update</li>
+    <li>DELETE is used to delete data — Delete  </li>
     
-  
   
   
 
