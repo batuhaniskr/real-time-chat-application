@@ -2,12 +2,12 @@
   This application built using Node.js, Express, Socket.io, Mongoose, RESTful Web Service.
 
 # Features
-    <ul>
+
    <li>Uses Express as the application Framework.</li> 
    <li>Real-time communication between a client and a server using Socket.io.</li>
    <li>Uses MongoDB, Mongoose  for storing messages and querying data.</li>
    <li>Uses RESTful Web Service for serve different platforms</li> 
-    </ul>
+   
 # Installation
 
 # Running Locally
