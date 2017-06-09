@@ -8,7 +8,7 @@
    
 # Installation
 
-# Running Locally
+### Running Locally
 
 Make sure you have Node.js and npm install.
 
@@ -23,7 +23,7 @@ Make sure you have Node.js and npm install.
      <pre>node app.js</pre>
   Your app should now be running on localhost:3000.
       
-# How It Works
+## How It Works
 
   A database called "chat_db" named is created via code. 
   The nickname, msg, group information is also kept in the table named Messages.
@@ -32,13 +32,13 @@ Make sure you have Node.js and npm install.
   User to user messaging:
    <pre> /w username messagetext</pre> the message is sent as.
       
- # Sockets
+ ## Sockets
     
    Having an active connection opened between the client and the server so client can send and receive data. This allows             real-time communication using TCP sockets. This is made possible by Socket.io.
 
    The client starts by connecting to the server through a socket(maybe also assigned to a specific namespace). Once connections is successful, client and server can emit and listen to events. 
 
-# RESTful
+## RESTful
 
   Using HTTP requests, we can use the respective action to trigger every of these four CRUD operations.    
     <li>POST is used to send data to a server — Create</li>
