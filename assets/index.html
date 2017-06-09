@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CHAT</title>
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+</head>
+<body>
+
+    <div id="nickWrap">
+        <div class="pen-title">
+           <h1>Chat System</h1>  <span> <i class='fa fa-paint-brush'></i> <i class='fa fa-code'></i></span>
+        </div>
+        <!-- Form Module-->
+        <div class="module form-module">
+            <div class="toggle"><i class="fa fa-times fa-pencil"></i>
+                <div class="tooltip">REGISTER</div>
+            </div>
+            <div class="form">
+                <h2>Login to your account</h2>
+                <p id="nickError" style="color: #d43f3a"></p>
+
+                <form id="setNick">
+                    <input id="nickName" type="text" placeholder="Username"/>
+                    <button>Login</button>
+                </form>
+            </div>
+            <div class="form">
+                <h2>Create an account</h2>
+                <form>
+                    <input type="text" placeholder="Username"/>
+                    <input type="password" placeholder="Password"/>
+                    <input type="email" placeholder="Email Address"/>
+                    <input type="tel" placeholder="Phone Number"/>
+                    <button>Register</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- chat -->
+
+
+    <div id="contentWrap">
+
+        <!-- chat template -->
+<p id="private_name"></p>
+
+        <div class="col-md-8">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                     CHAT HISTORY
+                </div>
+                <div class="panel-body">
+                    <ul class="media-list">
+
+                        <li class="media">
+
+                            <div class="media-body">
+                                <div id="chat">
+
+
+
+                                </div>
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="panel-footer">
+                    <div class="input-group">
+                        <input placeholder="Enter a message:" size="105" id="message"></input>
+                        <span class="input-group-btn">
+                                        <button id="send" class="btn btn-info" type="button">SEND</button>
+                                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="chatWrap">
+        <!--<div id="chat">
+
+
+        </div>-->
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    ONLINE USERS
+                </div>
+                <div class="panel-body">
+                    <ul class="media-list">
+
+                        <li class="media">
+
+                            <div class="media-body">
+                                <div id="users">
+
+
+                                </div>
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Group -->
+
+
+
+
+
+
+            <!-- Creating a group -->
+
+
+
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Grup Chat
+                </div>
+                <div class="panel-body">
+                    <ul class="media-list">
+
+                        <li class="media">
+
+                            <div class="media-body">
+                                <div id="rooms"></div>
+                                <div id="room creation"></div>
+                                <input type="button" class="btn btn-info" id="roombutton" value="+ Create Group"  style="margin-bottom: 10px"/>
+
+                                <input id="roomname" style="width:200px;" />
+
+                            </div>
+                </div>
+                </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <script>
+        var socket = io.connect();
+
+        socket.on('updatechat', function (username, data) {
+            $('#chat').append('<b>'+username + ':</b> ' + data + '<br>');
+        });
+        // listener, whenever the server emits 'updaterooms', this updates the room the client is in
+        socket.on('updaterooms', function(rooms, current_room) {
+            $('#rooms').empty();
+            $.each(rooms, function(key, value) {
+                if(value == current_room){
+                    $('#rooms').append('<div style="width:100px; margin-bottom: 10px"   class="btn btn-success">' + value + '</div>');
+                }
+                else {
+                    $('#rooms').append('<div><a href="#"  class="btn btn-success"  style="width:100px; margin-bottom: 10px" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>');
+                }
+            });
+        });
+
+        function switchRoom(room){
+            socket.emit('switchRoom', room);
+        }
+
+        $('#roombutton').click(function(){
+            $('#roomname').show();
+
+            if(document.getElementById("roomname").value!="") {
+                var name = $('#roomname').val();
+                $('#roomname').val('');
+                socket.emit('create', name)
+                $('#roomname').hide();
+
+            }
+        });
+
+        // on load of page
+        $(function(){
+            // when the client clicks SEND
+            $('#roomname').hide();
+
+            $('#send').click( function() {
+                var message = $('#chat').val();
+                $('#chat').val('');
+                // tell server to execute 'sendchat' and send along one parameter
+                socket.emit('sendchat', message);
+            });
+
+            // when the client hits ENTER on their keyboard
+            $('#chat').keypress(function(e) {
+                if(e.which == 13) {
+                    $(this).blur();
+                    $('#send').focus().click();
+                }
+            });
+        });
+
+
+        jQuery(function ($) {
+
+
+
+            // listener, whenever the server emits 'updatechat', this updates the chat body
+
+           var $nickForm = $('#setNick');
+           var $nickBox = $('#nickName');
+           var $nickError = $('#nickError');
+           var $users = $('#users');
+           var $private_name = $('#private_name');
+           var $messageForm = $('#send-message');
+           var $messageBox = $('#message');
+           var $chat = $('#chat');
+           var $media = $('#media');
+           var $roombutton = $('#roombutton');
+
+
+
+
+           $nickForm.submit(function (e) {
+
+               e.preventDefault();
+               socket.emit('new user', $nickBox.val(), function (data) {
+                    if (data){
+                        $('#nickWrap').hide();
+                        $('#contentWrap').show();
+                    }else {
+                        $nickError.html('That username is already taken! Please Try Again. ');
+                    }
+               });
+              $nickBox.val('');
+           });
+            var i;
+           socket.on('usernames', function (data) {
+               var html = ''
+               var list = document.getElementsByClassName("testi");
+               for ( i=0; i< data.length; i++){
+
+
+               html+='<div class="media">'+
+                       '<a class="pull-left" href="#">'+
+                       '<img class="media-object img-circle" style="max-height:40px;" src="img/user.png" />'+
+                       '</a>'+
+                       '<div class="media-body" >'+
+                       '<h5>'+
+
+                 '<p class="testi">'+data[i]+'</p>'+
+
+                   '</h5>'+
+
+
+                   '</div>'+
+
+                   '</div>'
+               }
+
+               $users.html(html);
+               for (var s = 0; s < list.length; s++) {
+                   list[s].setAttribute("id", "box" + s);
+
+
+               }
+               var t;
+               for ( t=0; t< s; t++) {
+                   document.getElementById('box' + t).onclick = function () {
+                       //var x = document.getElementById('box' + t).innerHTML
+                       alert(data);
+                   }
+               }
+           })
+
+           $("#send").click(function (e) {
+               e.preventDefault();
+               socket.emit('send message',$messageBox.val(), function (data) {
+                   $chat.append('<span class="error">'+data+"</span><br/>");
+               });
+               $messageBox.val('');
+           });
+           $private_name.click(function (e) {
+               e.preventDefault();
+              alert("1");
+           });
+
+           socket.on('load old msgs', function (docs) {
+                for(var i=0; i<docs.length; i++){
+                    displayMsg(docs[i]);
+               }
+           })
+
+
+           socket.on('new message', function (data) {
+                displayMsg(data)
+           })
+            function displayMsg(data) {
+
+                $chat.append(
+                '<div class="media">'+
+                    '<a class="pull-left" href="#">'+
+                    '<img class="media-object img-circle " src="img/user.png" />'+
+                    '</a>'+
+                '<div class="media-body" >'+
+                data.msg+
+                    '<br />'+
+                    '<small class="text-muted">' +
+                data.nick+
+                '</small>'+
+                '<hr />'+
+                '</div>'+
+                '</div>'
+            )
+            }
+
+
+                socket.on('whisper',function(data){
+                    $chat.append('<div class="media">'+
+                        '<a class="pull-left" href="#">'+
+                        '<img class="media-object img-circle " src="img/user.png" />'+
+                        '</a>'+
+                        '<div class="media-body" >'+
+                        '<span class="whisper"><b>'+data.msg+'</b></span>'+
+                        '<br />'+
+                        '<small class="text-muted">' +
+                        data.nick+
+                        '</small>'+
+                        '<hr />'+
+                        '</div>'+
+                        '</div>'
+                    );
+                });
+        });
+
+
+
+
+
+    </script>
+</body>
+</html>
