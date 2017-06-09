@@ -30,7 +30,7 @@ Make sure you have Node.js and npm install.
     
     User to user, As a publication broadcast or group in the room  messaging.
     User to user messaging:
-      <pre> /w username messagetext</pre> the message is sent as.</pre>
+      <pre> /w username messagetext</pre> the message is sent as.
       
     Sockets
     
