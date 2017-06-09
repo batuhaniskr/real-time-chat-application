@@ -18,6 +18,7 @@ Make sure you have Node.js and npm install.
   2. Install Dependencies
   <pre>npm install</pre>
   3. MongoDB start for need <pre>mongod</pre>command  from a different terminal.
+  
   4. Start the Application
     <pre>node app.js</pre>
   Your app should now be running on localhost:3000.
