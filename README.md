@@ -1,8 +1,10 @@
-![s2](https://user-images.githubusercontent.com/17202632/26983616-1892f3c2-4d45-11e7-8027-0fb74814f770.PNG)
 
 
 # Real Time Chat Application
   This application built using Node.js, Express, Socket.io, Mongoose, RESTful Web Service.
+  
+  ![s2](https://user-images.githubusercontent.com/17202632/26983616-1892f3c2-4d45-11e7-8027-0fb74814f770.PNG)
+
 # Features
   <li>Uses Express as the application Framework.</li> 
   <li>Real-time communication between a client and a server using Socket.io.</li>
