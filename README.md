@@ -26,7 +26,7 @@ Make sure you have Node.js and npm install.
   
   4. Start the Application
      <pre>node app.js</pre>
-  Your app should now be running on localhost:3000.
+  Application runs from localhost:3000.
       
 ## How It Works
 
